@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+</head>
+<body>
+    <!--面包屑导航 开始-->
+    <div class="crumb_warp">
+        <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+
+    </div>
+    <!--面包屑导航 结束-->
+
+	<!--结果集标题与导航组件 开始-->
+	<div class="result_wrap">
+
+    </div>
+    <!--结果集标题与导航组件 结束-->
+    
+    <div class="result_wrap">
+        <form action="/admin/link/linkadd" method="post">
+            <table class="add_tab">
+                <tbody>
+                    <tr>
+                        <th width="120"><i class="require">*</i>链接标题</th>
+                        <td>
+                            <input type="text" name="link_title" id="">
+                            <span id="link_title"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="120"><i class="require">*</i>链接网址</th>
+                        <td>
+                            <input type="text" name="link_content" id="">
+                            <span id="link_content"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input type="submit" value="提交">
+                            <input type="button" class="back" onclick="history.go(-1)" value="返回">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+</body>
+</html>
+<script src="style/js/jquery.js"></script>
+<script>
+    $('input[name="link_title"]').blur(function () {
+        checklink_title();
+    })
+    $('input[name="link_content"]').blur(function () {
+        checklink_content();
+    })
+    $('input[type="submit"]').click(function () {
+        if(checklink_title()&&checklink_content()){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function checklink_title(){
+        var link_title=$('input[name="link_title"]').val();
+        if(link_title==''){
+            $('#link_title').html('<i class="fa fa-exclamation-circle yellow"></i>不能为空');
+            return false;
+        }else{
+            $('#link_title').html('');
+            return true;
+        }
+    }
+    function checklink_content(){
+        var link_content=$('input[name="link_content"]').val();
+        var preg=/^((https|http|ftp|rtsp|mms){0,1}(:\/\/){0,1})www\.(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/;
+        if(!preg.test(link_content)){
+            $('#link_content').html('<i class="fa fa-exclamation-circle yellow"></i>请输入符合格式的网址例如：https://www.baidu.com');
+            return false;
+        }else{
+            $('#link_content').html('');
+            return true;
+        }
+    }
+</script>

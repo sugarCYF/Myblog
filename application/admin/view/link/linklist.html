@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+    <script type="text/javascript" src="style/js/jquery.js"></script>
+    <script type="text/javascript" src="style/js/ch-ui.admin.js"></script>
+</head>
+<body>
+    <!--面包屑导航 开始-->
+    <div class="crumb_warp">
+        <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+
+    </div>
+    <!--面包屑导航 结束-->
+
+	<!--结果页快捷搜索框 开始-->
+	<div class="search_wrap">
+        <form action="/admin/link/linklist" method="get">
+            <table class="search_tab">
+                <tr>
+
+                    <th width="70">关键字:</th>
+                    <td><input type="text" name="keywords" placeholder="链接标题关键字" value="{$keywords}"></td>
+                    <td><input type="submit" name="sub" value="查询"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!--结果页快捷搜索框 结束-->
+
+    <!--搜索结果页面 列表 开始-->
+
+        <div class="result_wrap">
+
+            <!--快捷导航 结束-->
+        </div>
+
+        <div class="result_wrap">
+            <div class="result_content">
+                <table class="list_tab">
+                    <tr>
+                        <th class="tc" width="5%">ID</th>
+                        <th class="tc">链接标题</th>
+                        <th class="tc">链接网址</th>
+                        <td class="tc">添加时间</td>
+                        <th class="tc">操作</th>
+                    </tr>
+                    <?php foreach($linklist as $k => $v){ ?>
+                    <tr>
+                        <td class="tc">{$v.link_id}</td>
+                        <td class="tc">
+                            {$v.link_title}
+                        </td>
+                        <td>{$v.link_content}</td>
+                        <td><?php echo date('Y-m-d H:i:s',$v['link_addtime']);?></td>
+                        <td class="tc">
+                            <a href="/admin/link/linkdel?id={$v.link_id}&keywords={$keywords}">删除</a>
+                            <a href="/admin/link/linksave?id={$v.link_id}&keywords={$keywords}">编辑</a>
+                        </td>
+                    </tr>
+                    <?php } ?>
+
+                </table>
+
+
+<div class="page_nav">
+<div>
+
+    {$page|raw}
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
+<script src="style/js/jquery.js"></script>
+<script>
+    var keywords=$('input[name="keywords"]').val();
+    $('.pagination li a').each(function(i){
+        var href=$(this).attr('href');
+        href=href+'&keywords='+keywords;
+        $(this).attr('href',href);
+    })
+</script>
