@@ -1,8 +1,6 @@
 <?php
 namespace app\admin\controller;
 
-use think\Db;
-
 class Sensitivewords extends Rbac
 {
     public function swadd(){
