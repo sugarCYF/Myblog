@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+    <script type="text/javascript" src="style/js/jquery.js"></script>
+    <script type="text/javascript" src="style/js/ch-ui.admin.js"></script>
+</head>
+<body>
+    <!--面包屑导航 开始-->
+    <div class="crumb_warp">
+        <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+
+    </div>
+    <!--面包屑导航 结束-->
+
+	<!--结果页快捷搜索框 开始-->
+	<div class="search_wrap">
+        <form action="/admin/blog/bloglist" method="get">
+            <input type="hidden" name="is_show" value="{$bloglist.0.is_show}">
+            <table class="search_tab">
+                <tr>
+
+                    <th width="70">关键字:</th>
+                    <td><input type="text" name="keywords" placeholder="博文名称或作者名称关键字" value="{$keywords}"></td>
+                    <td><input type="submit" name="sub" value="查询"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!--结果页快捷搜索框 结束-->
+
+    <!--搜索结果页面 列表 开始-->
+
+        <div class="result_wrap">
+
+            <!--快捷导航 结束-->
+        </div>
+
+        <div class="result_wrap">
+            <div class="result_content">
+                <table class="list_tab">
+                    <tr>
+                        <th class="tc" width="5%">ID</th>
+                        <th class="tc">博文名称</th>
+                        <th class="tc">博文作者</th>
+                        <th>点赞</th>
+                        <th>收藏</th>
+                        <th>发表时间</th>
+                        <th>审核</th>
+                        <th>操作</th>
+                    </tr>
+                    <?php foreach($bloglist as $k => $v){ ?>
+                    <tr>
+                        <td class="tc">{$v.blog_id}</td>
+                        <td class="tc">
+                            {$v.blog_title}
+                        </td>
+                        <td class="tc">{$v.user_name}</td>
+                        <td>
+                            {$v.host_num}
+                        </td>
+                        <td>{$v.collec_num}</td>
+                        <td><?php echo date('Y-m-d H:i:s',$v['publishtime']);?></td>
+                        <td>
+                            <?php if($v['is_show']==3){
+                            echo "待审核";
+                            }elseif($v['is_show']==1){
+                            echo "审核通过";
+                            }elseif($v['is_show']==0){
+                            echo "审核未通过";
+                            }?>
+                        </td>
+                        <td>
+                            <a href="/admin/blog/blogcontent?id={$v.blog_id}">博文详情</a>
+                        </td>
+                    </tr>
+                    <?php } ?>
+
+                </table>
+
+
+<div class="page_nav">
+<div>
+
+<a class="first" href="/admin/blog/bloglist?is_show={$bloglist.0.is_show}&p=1&keywords={$keywords}">第一页</a>
+<a class="prev" href="/admin/blog/bloglist?is_show={$bloglist.0.is_show}&p={$p-1}&keywords={$keywords}">上一页</a>
+
+<?php for($i=1;$i<=$page;$i++){ ?>
+    <?php if($i==$p){ ?>
+        <a class="num" href="/admin/blog/bloglist?is_show={$bloglist.0.is_show}&p={$i}&keywords={$keywords}" style="background-color: #1963aa;color: white">{$i}</a>
+    <?php }else{ ?>
+        <a class="num" href="/admin/blog/bloglist?is_show={$bloglist.0.is_show}&p={$i}&keywords={$keywords}">{$i}</a>
+    <?php } ?>
+<?php } ?>
+
+<a class="next" href="/admin/blog/bloglist?is_show={$bloglist.0.is_show}&p={$p+1}&keywords={$keywords}">下一页</a>
+<a class="end" href="/admin/blog/bloglist?is_show={$bloglist.0.is_show}&p={$page}&keywords={$keywords}">最后一页</a>
+<span class="rows">{$count}条记录</span>
+</div>
+</div>
+
+
+
+
+            </div>
+        </div>
+
+    <!--搜索结果页面 列表 结束-->
+
+
+
+</body>
+</html>

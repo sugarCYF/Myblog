@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+    <script type="text/javascript" src="style/js/jquery.js"></script>
+    <script type="text/javascript" src="style/js/ch-ui.admin.js"></script>
+</head>
+<body>
+    <!--面包屑导航 开始-->
+    <div class="crumb_warp">
+        <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+
+    </div>
+    <!--面包屑导航 结束-->
+
+	<!--结果页快捷搜索框 开始-->
+	<div class="search_wrap">
+        <form action="/admin/users/index_userlist" method="get">
+            <table class="search_tab">
+                <tr>
+
+                    <th width="70">关键字:</th>
+                    <td><input type="text" name="keywords" placeholder="用户名称关键字" value="{$keywords}"></td>
+                    <td><input type="submit" name="sub" value="查询"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!--结果页快捷搜索框 结束-->
+
+    <!--搜索结果页面 列表 开始-->
+
+        <div class="result_wrap">
+
+            <!--快捷导航 结束-->
+        </div>
+
+        <div class="result_wrap">
+            <div class="result_content">
+                <table class="list_tab">
+                    <tr>
+                        <th class="tc" width="5%">ID</th>
+                        <th class="tc">用户名称</th>
+                        <th class="tc">用户邮箱</th>
+                        <th class="tc">用户手机号</th>
+                        <th class="tc">注册时间</th>
+                        <th class="tc">操作</th>
+                    </tr>
+                    <?php foreach($userlist as $k => $v){ ?>
+                    <tr>
+                        <td class="tc">{$v.user_id}</td>
+                        <td class="tc">
+                            {$v.user_name}
+                        </td>
+                        <td class="tc">{$v.user_email}</td>
+                        <td class="tc">
+                            {$v.user_call}
+                        </td>
+                        <td class="tc"><?php echo date('Y-m-d H:i:s',$v['addtime']);?></td>
+                        <td class="tc">
+                            <?php if($v['user_able']==1){ ?>
+                            <a href="/admin/users/changeable?id={$v.user_id}&user_able=0&p={$p}&keywords={$keywords}"><button style="background-color: red;color: white;border: none;border-radius:8px;padding:10px 20px;">禁用</button></a>
+                            <?php }else{ ?>
+                            <a href="/admin/users/changeable?id={$v.user_id}&user_able=1&p={$p}&keywords={$keywords}"><button style="background-color: green;color: white;border: none;border-radius:8px;padding:10px 20px;">启用</button></a>
+                            <?php } ?>
+                        </td>
+                    </tr>
+                    <?php } ?>
+
+                </table>
+
+
+<div class="page_nav">
+<div>
+
+<a class="first" href="/admin/users/index_userlist?p=1&keywords={$keywords}">第一页</a>
+<a class="prev" href="/admin/users/index_userlist?p={$p-1}&keywords={$keywords}">上一页</a>
+
+<?php for($i=1;$i<=$page;$i++){ ?>
+    <?php if($i==$p){ ?>
+        <a class="num" href="/admin/users/index_userlist?p={$i}&keywords={$keywords}" style="background-color: #1963aa;color: white">{$i}</a>
+    <?php }else{ ?>
+        <a class="num" href="/admin/users/index_userlist?p={$i}&keywords={$keywords}">{$i}</a>
+    <?php } ?>
+<?php } ?>
+
+<a class="next" href="/admin/users/index_userlist?p={$p+1}&keywords={$keywords}">下一页</a>
+<a class="end" href="/admin/users/index_userlist?p={$page}&keywords={$keywords}">最后一页</a>
+<span class="rows">{$count}条记录</span>
+</div>
+</div>
+
+
+
+
+            </div>
+        </div>
+
+    <!--搜索结果页面 列表 结束-->
+
+
+
+</body>
+</html>

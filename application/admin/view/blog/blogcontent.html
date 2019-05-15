@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+</head>
+<body>
+	<!--面包屑导航 开始-->
+	<div class="crumb_warp">
+		<!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+
+	</div>
+	<!--面包屑导航 结束-->
+	
+	<!--结果集标题与导航组件 开始-->
+	<div class="result_wrap">
+
+    </div>
+    <!--结果集标题与导航组件 结束-->
+
+	
+    <div class="result_wrap">
+        <div class="result_title">
+            <h3>博文详情</h3>
+        </div>
+        <div class="result_content">
+            <ul>
+                <li>
+                    <label>博文标题</label><span>{$arr.blog_title}</span>
+                </li>
+                <li>
+                    <label>作者名称</label><span>{$arr.user_name}</span>
+                </li>
+                <li>
+                    <label>发表时间</label><span>{$arr.publishtime}</span>
+                </li>
+                <li>
+                    <label>点赞量</label><span>{$arr.host_num}</span>
+                </li>
+                <li>
+                    <label>收藏量</label><span>{$arr.collec_num}</span>
+                </li>
+                <li>
+                    <label>审核状态</label>
+                    <span>
+                    <?php if($arr['is_show']==3){
+                            echo "待审核";
+                            }elseif($arr['is_show']==1){
+                            echo "审核通过";
+                            }elseif($arr['is_show']==0){
+                            echo "审核未通过";
+                            }?>
+                    </span>
+                </li>
+                <li>
+                    <label>博文内容</label><span>{$arr.blog_content}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="result_wrap">
+        <div class="result_title">
+            <h3>审核博文</h3>
+        </div>
+        <div class="result_content">
+            <ul>
+                <li>
+                    <?php if($arr['is_show']==3){ ?>
+                    <label><a href="/admin/blog/changeshow?id={$arr.blog_id}&is_show=1"><button>审核通过</button></a>&nbsp;<a href="/admin/blog/changeshow?id={$arr.blog_id}&is_show=0"><button>审核不通过</button></a></label>
+                    <?php }elseif($arr['is_show']==1){ ?>
+                    <label><a href="/admin/blog/changeshow?id={$arr.blog_id}&is_show=0"><button>审核不通过</button></a></label>
+                    <?php }elseif($arr['is_show']==0){ ?>
+                    <label><a href="/admin/blog/changeshow?id={$arr.blog_id}&is_show=1"><button>审核通过</button></a></label>
+                    <?php } ?>
+                </li>
+            </ul>
+        </div>
+    </div>
+	<!--结果集列表组件 结束-->
+
+</body>
+</html>

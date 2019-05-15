@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+    <script type="text/javascript" src="style/js/jquery.js"></script>
+    <script type="text/javascript" src="style/js/ch-ui.admin.js"></script>
+</head>
+<body>
+    <!--面包屑导航 开始-->
+    <div class="crumb_warp">
+        <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+
+    </div>
+    <!--面包屑导航 结束-->
+
+	<!--结果页快捷搜索框 开始-->
+	<div class="search_wrap">
+        <form action="/admin/discuss/discusslist" method="get">
+            <input type="hidden" name="discuss_is_show" value="{$discusslist.0.discuss_is_show}">
+            <table class="search_tab">
+                <tr>
+
+                    <th width="70">关键字:</th>
+                    <td><input type="text" name="keywords" placeholder="博文名称或评论人关键字" value="{$keywords}"></td>
+                    <td><input type="submit" name="sub" value="查询"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!--结果页快捷搜索框 结束-->
+
+    <!--搜索结果页面 列表 开始-->
+
+        <div class="result_wrap">
+
+            <!--快捷导航 结束-->
+        </div>
+
+        <div class="result_wrap">
+            <div class="result_content">
+                <table class="list_tab">
+                    <tr>
+                        <th class="tc" width="5%">ID</th>
+                        <th class="tc">博文名称</th>
+                        <th class="tc">评论人</th>
+                        <th class="tc">评论内容</th>
+                        <th class="tc">评论时间</th>
+                        <th class="tc">审核</th>
+                        <th class="tc">操作</th>
+                    </tr>
+                    <?php foreach($discusslist as $k => $v){ ?>
+                    <tr>
+                        <td class="tc">{$v.discuss_id}</td>
+                        <td class="tc">
+                            {$v.blog_title}
+                        </td>
+                        <td class="tc">{$v.user_name}</td>
+                        <td class="tc">{$v.discuss_content}</td>
+                        <td class="tc"><?php echo date('Y-m-d H:i:s',$v['discuss_addtime']);?></td>
+                        <td class="tc">
+                            <?php if($v['discuss_is_show']==3){
+                            echo "待审核";
+                            }elseif($v['discuss_is_show']==1){
+                            echo "审核通过";
+                            }elseif($v['discuss_is_show']==0){
+                            echo "审核未通过";
+                            }?>
+                        </td>
+                        <td class="tc">
+                            <?php if($v['discuss_is_show']==3){ ?>
+                            <a href="/admin/discuss/changeshow?id={$v.discuss_id}&is_show=1&discuss_is_show={$v.discuss_is_show}&p={$p}&keywords={$keywords}"><button>审核通过</button></a>&nbsp;<a href="/admin/blog/changeshow?id={$v.discuss_id}&is_show=0&discuss_is_show={$v.discuss_is_show}"><button>审核不通过</button></a>
+                            <?php }elseif($v['discuss_is_show']==1){ ?>
+                            <a href="/admin/discuss/changeshow?id={$v.discuss_id}&is_show=0&discuss_is_show={$v.discuss_is_show}&p={$p}&keywords={$keywords}"><button>审核不通过</button></a>
+                            <?php }elseif($v['discuss_is_show']==0){ ?>
+                            <a href="/admin/discuss/changeshow?id={$v.discuss_id}&is_show=1&discuss_is_show={$v.discuss_is_show}&p={$p}&keywords={$keywords}"><button>审核通过</button></a>
+                            <?php } ?>
+                        </td>
+                    </tr>
+                    <?php } ?>
+
+                </table>
+
+
+<div class="page_nav">
+<div>
+
+<a class="first" href="/admin/discuss/discusslist?discuss_is_show={$discusslist.0.discuss_is_show}&p=1&keywords={$keywords}">第一页</a>
+<a class="prev" href="/admin/discuss/discusslist?discuss_is_show={$discusslist.0.discuss_is_show}&p={$p-1}&keywords={$keywords}">上一页</a>
+
+<?php for($i=1;$i<=$page;$i++){ ?>
+    <?php if($i==$p){ ?>
+        <a class="num" href="/admin/discuss/discusslist?discuss_is_show={$discusslist.0.discuss_is_show}&p={$i}&keywords={$keywords}" style="background-color: #1963aa;color: white">{$i}</a>
+    <?php }else{ ?>
+        <a class="num" href="/admin/discuss/discusslist?discuss_is_show={$discusslist.0.discuss_is_show}&p={$i}&keywords={$keywords}">{$i}</a>
+    <?php } ?>
+<?php } ?>
+
+<a class="next" href="/admin/discuss/discusslist?discuss_is_show={$discusslist.0.discuss_is_show}&p={$p+1}&keywords={$keywords}">下一页</a>
+<a class="end" href="/admin/discuss/discusslist?discuss_is_show={$discusslist.0.discuss_is_show}&p={$page}&keywords={$keywords}">最后一页</a>
+<span class="rows">{$count}条记录</span>
+</div>
+</div>
+
+
+
+
+            </div>
+        </div>
+
+    <!--搜索结果页面 列表 结束-->
+
+
+
+</body>
+</html>

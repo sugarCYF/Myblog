@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+    <script type="text/javascript" src="style/js/jquery.js"></script>
+    <script type="text/javascript" src="style/js/ch-ui.admin.js"></script>
+</head>
+<body>
+    <!--面包屑导航 开始-->
+<div class="crumb_warp">
+    <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+
+</div>
+<!--面包屑导航 结束-->
+
+<!--结果集标题与导航组件 开始-->
+<div class="result_wrap">
+    <div class="result_title">
+        <h3>修改密码</h3>
+    </div>
+</div>
+<!--结果集标题与导航组件 结束-->
+
+<div class="result_wrap">
+    <form method="post" onsubmit="return changePass()" action="/admin/menu/pass">
+        <table class="add_tab">
+            <tbody>
+            <tr>
+                <th width="120"><i class="require">*</i>原密码：</th>
+                <td>
+                    <input type="password" name="password_o"> </i>请输入原始密码<span id="password_o"></span></span>
+                </td>
+            </tr>
+            <tr>
+                <th><i class="require">*</i>新密码：</th>
+                <td>
+                    <input type="password" name="password"> </i>新密码6-20位<span id="password"></span></span>
+                </td>
+            </tr>
+            <tr>
+                <th><i class="require">*</i>确认密码：</th>
+                <td>
+                    <input type="password" name="password_c"> </i>再次输入密码<span id="password_c"></span></span>
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    <input type="submit" value="提交">
+                    <input type="button" class="back" onclick="history.go(-1)" value="返回">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>
+<script src="style/js/jquery.js"></script>
+<script>
+    $('input[name="password_o"]').blur(function () {
+        checkpassword_o();
+    })
+    $('input[name="password"]').blur(function () {
+        checkpassword();
+    })
+    $('input[name="password_c"]').blur(function () {
+        checkpassword_c();
+    })
+    $('input[type="submit"]').click(function(){
+        if(checkpassword_o()&&checkpassword()&&checkpassword_c()){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function checkpassword_o(){
+        var password_o=$('input[name="password_o"]').val();
+        if(password_o == ''){
+            $('#password_o').text('密码不能为空');
+            return false;
+        }else{
+            $('#password_o').text('');
+            return true;
+        }
+    }
+    function checkpassword(){
+        var password=$('input[name="password"]').val();
+        var preg=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        if(preg.test(password)){
+            $('#password').text('');
+            return true;
+        }else{
+            $('#password').text('密码必须6-30位，有字母大小写和数字');
+            return false;
+        }
+    }
+    function checkpassword_c(){
+        var password=$('input[name="password"]').val();
+        var password_c=$('input[name="password_c"]').val();
+        if(password==password_c){
+            $('#password_c').text('');
+            return true;
+        }else{
+            $('#password_c').text('两次输入密码不相同');
+            return false;
+        }
+    }
+</script>

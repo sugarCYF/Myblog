@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+</head>
+<body>
+    <!--面包屑导航 开始-->
+    <div class="crumb_warp">
+        <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+    </div>
+    <!--面包屑导航 结束-->
+
+	<!--结果集标题与导航组件 开始-->
+	<div class="result_wrap">
+
+    </div>
+    <!--结果集标题与导航组件 结束-->
+    
+    <div class="result_wrap">
+        <form action="/admin/admin/roleadd" method="post">
+            <table class="add_tab">
+                <tbody>
+                    <tr>
+                        <th width="120"><i class="require">*</i>职位名称</th>
+                        <td>
+                            <input type="text" name="role_name" id="">
+                            <span id="role_name"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><i class="require">*</i>所拥有权限</th>
+                        <td>
+                            <?php foreach($nodelist as $k => $v){ ?>
+                            <label for=""><input type="checkbox" name="node_id[]" value="{$v.node_id}">{$v.node_name}</label>
+                            <?php } ?>
+                            <span id="node_id"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input type="submit" value="提交">
+                            <input type="button" class="back" onclick="history.go(-1)" value="返回">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+</body>
+</html>
+<script src="style/js/jquery.js"></script>
+<script>
+    $('input[name="role_name"]').blur(function () {
+        checkrole_name();
+    })
+    $('input[type="checkbox"]').click(function () {
+        checknode_id();
+    })
+    $('input[type="submit"]').click(function(){
+        if(checkrole_name()&&checknode_id()){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function checkrole_name(){
+        var role_name=$('input[name="role_name"]').val();
+        if(role_name==''){
+            $('#role_name').html('<i class="fa fa-exclamation-circle yellow"></i>不能为空');
+            return false;
+        }else{
+            $('#role_name').html('');
+            return true;
+        }
+    }
+    function checknode_id(){
+        var checknode_id=$('input[type="checkbox"]').is(':checked');
+        if(checknode_id){
+            $('#node_id').html('');
+            return true;
+        }else{
+            $('#node_id').html('<i class="fa fa-exclamation-circle yellow"></i>请选择一个或多个');
+            return false;
+        }
+    }
+</script>

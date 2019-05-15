@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/admin/">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
+	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
+    <script type="text/javascript" src="style/js/jquery.js"></script>
+    <script type="text/javascript" src="style/js/ch-ui.admin.js"></script>
+</head>
+<body>
+    <!--面包屑导航 开始-->
+    <div class="crumb_warp">
+        <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
+
+    </div>
+    <!--面包屑导航 结束-->
+
+	<!--结果页快捷搜索框 开始-->
+	<div class="search_wrap">
+        <form action="/admin/admin/rolelist" method="get">
+            <table class="search_tab">
+                <tr>
+
+                    <th width="70">关键字:</th>
+                    <td><input type="text" name="keywords" placeholder="职位名称关键字" value="{$keywords}"></td>
+                    <td><input type="submit" name="sub" value="查询"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!--结果页快捷搜索框 结束-->
+
+    <!--搜索结果页面 列表 开始-->
+
+        <div class="result_wrap">
+
+            <!--快捷导航 结束-->
+        </div>
+
+        <div class="result_wrap">
+            <div class="result_content">
+                <table class="list_tab">
+                    <tr>
+                        <th class="tc" width="5%">ID</th>
+                        <th class="tc">职位名称</th>
+                        <th class="tc">操作</th>
+                    </tr>
+                    <?php foreach($rolelist as $k => $v){ ?>
+                    <tr>
+                        <td class="tc">{$v.role_id}</td>
+                        <td class="tc">
+                            {$v.role_name}
+                        </td>
+                        <td class="tc"><a href="/admin/admin/changenode?id={$v.role_id}">分配权限</a><a href="/admin/admin/roledel?id={$v.role_id}">删除</a></td>
+                    </tr>
+                    <?php } ?>
+
+                </table>
+
+
+<div class="page_nav">
+<div>
+
+<a class="first" href="/admin/admin/rolelist?p=1&keywords={$keywords}">第一页</a>
+<a class="prev" href="/admin/admin/rolelist?p={$p-1}&keywords={$keywords}">上一页</a>
+
+<?php for($i=1;$i<=$page;$i++){ ?>
+    <?php if($i==$p){ ?>
+        <a class="num" href="/admin/admin/rolelist?p={$i}&keywords={$keywords}" style="background-color: #1963aa;color: white">{$i}</a>
+    <?php }else{ ?>
+        <a class="num" href="/admin/admin/rolelist?p={$i}&keywords={$keywords}">{$i}</a>
+    <?php } ?>
+<?php } ?>
+
+<a class="next" href="/admin/admin/rolelist?p={$p+1}&keywords={$keywords}">下一页</a>
+<a class="end" href="/admin/admin/rolelist?p={$page}&keywords={$keywords}">最后一页</a>
+<span class="rows">{$count}条记录</span>
+</div>
+</div>
+
+
+
+
+            </div>
+        </div>
+
+    <!--搜索结果页面 列表 结束-->
+
+
+
+</body>
+</html>
