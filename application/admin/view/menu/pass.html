@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <base href="/admin/">
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
-	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
-    <script type="text/javascript" src="style/js/jquery.js"></script>
-    <script type="text/javascript" src="style/js/ch-ui.admin.js"></script>
-</head>
-<body>
+
     <!--面包屑导航 开始-->
 <div class="crumb_warp">
     <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
@@ -57,9 +47,7 @@
         </table>
     </form>
 </div>
-</body>
-</html>
-<script src="style/js/jquery.js"></script>
+
 <script>
     $('input[name="password_o"]').blur(function () {
         checkpassword_o();
@@ -89,7 +77,7 @@
     }
     function checkpassword(){
         var password=$('input[name="password"]').val();
-        var preg=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
+        var preg=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,30}$/;
         if(preg.test(password)){
             $('#password').text('');
             return true;

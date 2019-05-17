@@ -10,6 +10,13 @@ class Sensitivewords extends Rbac
             if(isset($arr['word'])||!empty($arr['word'])){
                 $this->error('添加词汇已存在','/admin/sensitivewords/swadd');
             }
+
+            $result = $this->validate(['word'=>$word],'app\admin\validate\SensitiveWords');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                $this->error($result,'/admin/admin/roleadd');
+            }
+
             $res=db('sensitive_words')->insert(['word'=>$word]);
             if($res){
                 $this->success('添加成功','/admin/sensitivewords/swadd');
@@ -17,7 +24,8 @@ class Sensitivewords extends Rbac
                 $this->error('添加失败','/admin/sensitivewords/swadd');
             }
         }else{
-            return view('swadd');
+
+            return $this->fetch('swadd');
         }
     }
     public function swlist(){
@@ -25,7 +33,8 @@ class Sensitivewords extends Rbac
 
         $swlist=db('sensitive_words')->where('word','like',"%$keywords%")->paginate(5);
         $page=$swlist->render();
-        return view('swlist',['swlist'=>$swlist,'keywords'=>$keywords,'page'=>$page]);
+
+        return $this->fetch('swlist',['swlist'=>$swlist,'keywords'=>$keywords,'page'=>$page]);
     }
     public function swdel(){
         $id=$_GET['id'];

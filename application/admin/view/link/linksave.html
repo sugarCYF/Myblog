@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <base href="/admin/">
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
-	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
-</head>
-<body>
+
     <!--面包屑导航 开始-->
     <div class="crumb_warp">
         <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
@@ -21,7 +13,8 @@
     <!--结果集标题与导航组件 结束-->
     
     <div class="result_wrap">
-        <form action="/admin/link/linksave?id={$arr.link_id}" method="post">
+        <form action="/admin/link/linksave" method="post">
+            <input type="hidden" name="id" value="{$arr.link_id}">
             <table class="add_tab">
                 <tbody>
                     <tr>
@@ -51,8 +44,7 @@
     </div>
 
 </body>
-</html>
-<script src="style/js/jquery.js"></script>
+
 <script>
     $('input[name="link_title"]').blur(function () {
         checklink_title();

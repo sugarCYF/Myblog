@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <base href="/admin/">
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
-	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
-</head>
-<body>
+
 	<!--面包屑导航 开始-->
 	<div class="crumb_warp">
 		<!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
@@ -55,7 +47,12 @@
                     </span>
                 </li>
                 <li>
-                    <label>博文内容</label><span>{$arr.blog_content}</span>
+                    <label>博文内容</label>
+                    <div id="editor">
+                        <p>{$arr.blog_content}<p>
+                    </div>
+
+
                 </li>
             </ul>
         </div>
@@ -82,5 +79,12 @@
     </div>
 	<!--结果集列表组件 结束-->
 
-</body>
-</html>
+
+<!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
+<script type="text/javascript" src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    // 或者 var editor = new E( document.getElementById('editor') )
+    editor.create()
+</script>

@@ -16,6 +16,13 @@ class Advert extends Rbac
             if(empty($data['advert_remarks'])){
                 $data['advert_remarks']='无';
             }
+
+            $result = $this->validate($data,'app\admin\validate\Advert');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                $this->error($result,'/admin/admin/advertadd');
+            }
+
             $res=db('advert')->insert($data);
             if($res){
                 $this->success('添加成功','/admin/advert/advertadd');
@@ -23,7 +30,8 @@ class Advert extends Rbac
                 $this->error('添加失败','/admin/advert/advertadd');
             }
         }else{
-            return view('advertadd');
+
+            return $this->fetch('advertadd');
         }
     }
     public function advertlist(){
@@ -38,7 +46,8 @@ class Advert extends Rbac
         }
         $limit=($p-1)*5;
         $advertlist=db('advert')->where('advert_name','like',"%$keywords%")->limit("$limit",'5')->select();
-        return view('advertlist',['advertlist'=>$advertlist,'keywords'=>$keywords,'page'=>$page,'count'=>$count[0]['count'],'p'=>$p]);
+
+        return $this->fetch('advertlist',['advertlist'=>$advertlist,'keywords'=>$keywords,'page'=>$page,'count'=>$count[0]['count'],'p'=>$p]);
     }
     public function changeshow(){
         $id=$_GET['id'];

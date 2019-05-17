@@ -14,6 +14,13 @@ class Link extends Rbac
             }
             $data=$_POST;
             $data['link_addtime']=time();
+
+            $result = $this->validate($data,'app\admin\validate\Link');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                $this->error($result,'/admin/admin/linkadd');
+            }
+
             $res=db('link')->insert($data);
             if($res){
                 $this->success('添加成功','/admin/link/linkadd');
@@ -21,7 +28,8 @@ class Link extends Rbac
                 $this->error('添加失败','/admin/link/linkadd');
             }
         }else{
-            return view('linkadd');
+
+            return $this->fetch('linkadd');
         }
     }
     public function linklist(){
@@ -29,7 +37,8 @@ class Link extends Rbac
 
         $linklist=db('link')->where('link_title','like',"%$keywords%")->paginate(5);
         $page=$linklist->render();
-        return view('linklist',['linklist'=>$linklist,'keywords'=>$keywords,'page'=>$page]);
+
+        return $this->fetch('linklist',['linklist'=>$linklist,'keywords'=>$keywords,'page'=>$page]);
     }
     public function linkdel(){
         $id=$_GET['id'];
@@ -37,14 +46,21 @@ class Link extends Rbac
         return $this->linklist();
     }
     public function linksave(){
-        $id=$_GET['id'];
+
         if($_POST){
+            $id=$_POST['id'];
             $link_title=$_POST['link_title'];
             $arr=db('link')->where('link_id','<>',"$id")->where('link_title','=',"$link_title")->find();
             if(isset($arr['link_title'])||!empty($arr['link_title'])){
                 $this->error('链接标题已存在','/admin/link/linklist');
             }
             $data=$_POST;
+            unset($data['id']);
+            $result = $this->validate($data,'app\admin\validate\Link');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                $this->error($result,'/admin/admin/linklist');
+            }
             $res=Db::table('link')->where('link_id','=',"$id")->update($data);
             if($res){
                 $this->success('编辑成功','/admin/link/linklist');
@@ -52,8 +68,10 @@ class Link extends Rbac
                 $this->error('编辑失败','/admin/link/linklist');
             }
         }else{
+            $id=$_GET['id'];
             $arr=db('link')->where('link_id','=',"$id")->find();
-            return view('linksave',['arr'=>$arr]);
+
+            return $this->fetch('linksave',['arr'=>$arr]);
         }
     }
 }

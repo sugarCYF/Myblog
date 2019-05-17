@@ -6,12 +6,13 @@ use think\facade\Session;
 class Menu extends Rbac
 {
     public function index(){
-        $arr=Session::get('userarr');
-        return view('index',['arr'=>$arr]);
+
+
+
+        return $this->fetch('welcome');
+//        return view('index',['arr'=>$arr]);
     }
-    public function welcome(){
-        return view('welcome');
-    }
+
     public function pass(){
         if($_POST){
             $arr=Session::get('userarr');
@@ -26,7 +27,8 @@ class Menu extends Rbac
                 }
             }
         }else{
-            return view('pass');
+
+            return $this->fetch('pass');
         }
     }
 }

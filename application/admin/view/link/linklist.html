@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <base href="/admin/">
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="style/css/ch-ui.admin.css">
-	<link rel="stylesheet" href="style/font/css/font-awesome.min.css">
-    <script type="text/javascript" src="style/js/jquery.js"></script>
-    <script type="text/javascript" src="style/js/ch-ui.admin.js"></script>
-</head>
-<body>
+
     <!--面包屑导航 开始-->
     <div class="crumb_warp">
         <!--<i class="fa fa-bell"></i> 欢迎使用登陆网站后台，建站的首选工具。-->
@@ -58,7 +48,7 @@
                         <td><?php echo date('Y-m-d H:i:s',$v['link_addtime']);?></td>
                         <td class="tc">
                             <a href="/admin/link/linkdel?id={$v.link_id}&keywords={$keywords}">删除</a>
-                            <a href="/admin/link/linksave?id={$v.link_id}&keywords={$keywords}">编辑</a>
+                            <a href="/admin/link/linksave?id={$v.link_id}">编辑</a>
                         </td>
                     </tr>
                     <?php } ?>
@@ -74,9 +64,7 @@
 </div>
 </div>
 </div>
-</body>
-</html>
-<script src="style/js/jquery.js"></script>
+
 <script>
     var keywords=$('input[name="keywords"]').val();
     $('.pagination li a').each(function(i){

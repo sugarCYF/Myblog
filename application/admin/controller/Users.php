@@ -17,7 +17,10 @@ class Users extends Rbac
         }
         $limit=($p-1)*5;
         $userlist=db('index_user')->where('user_name','like',"%$keywords%")->limit("$limit",'5')->select();
-        return view('index_userlist',['userlist'=>$userlist,'keywords'=>$keywords,'page'=>$page,'count'=>$count[0]['count'],'p'=>$p]);
+//        return view('index_userlist',['userlist'=>$userlist,'keywords'=>$keywords,'page'=>$page,'count'=>$count[0]['count'],'p'=>$p]);
+
+
+        return $this->fetch('index_userlist',['userlist'=>$userlist,'keywords'=>$keywords,'page'=>$page,'count'=>$count[0]['count'],'p'=>$p]);
     }
     public function changeable(){
         $id=$_GET['id'];
