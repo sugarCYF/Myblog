@@ -14,8 +14,7 @@ class Advert extends Validate
      */
     protected $rule = [
         'advert_name'  => ['require', 'max' => 25],
-        'advert_image'   => [  'regex' => '/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,30}/'],
-        'advert_remarks' => 'number',
+        'advert_image'   => ['require'],
     ];
 
     /**
@@ -25,8 +24,8 @@ class Advert extends Validate
      * @var array
      */
     protected $message = [
-        'user_name.require' => '名称不能为空',
-        'user_name.max'     => '名称最多不能超过25个字符',
-        'user_pwd.regex'   => '密码必须6-30位，有字母大小写和数字',
+        'advert_name.require' => '广告名称不能为空',
+        'advert_name.max'     => '广告名称最多不能超过25个字符',
+        'advert_image.require'   => '请上传广告图片',
     ];
 }
