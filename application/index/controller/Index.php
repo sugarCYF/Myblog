@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\index\model\Advert;
+use app\index\model\Blog;
 use think\Controller;
 
 class Index extends Controller
@@ -10,12 +11,17 @@ class Index extends Controller
     {
         $Advert = new Advert();
         $advertList = $Advert->getAdvertList();
+
+        $Blog = new Blog();
+        $blogList = $Blog->getBlogList();
 //        echo "<pre>";
-//        var_dump($advertList);die;
-//        $this->view->engine->layout(true);
-//        return $this->fetch('index');
-        return view('index',['advertList' => $advertList]);
+//        var_dump($blogList);die;
+        return view('index',['advertList' => $advertList , 'blogList' => $blogList]);
     }
 
+    public function sign()
+    {
+        return view('sign');
+    }
 
 }
