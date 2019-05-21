@@ -1,0 +1,78 @@
+
+<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<div style="width:50%;margin-left: 25%;">
+<form action="/index/index/savePwd" method="post">
+    <div class="form-group">
+        <label for="exampleInputEmail1">原密码</label>
+        <input type="password" class="form-control" id="" placeholder="请输入原密码" name="pwd_o"><p id="pwd_o" class="bg-primary"></p>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">新密码</label>
+        <input type="password" class="form-control" id="exampleInputEmail1" placeholder="新密码" name="user_pwd"><p id="user_pwd" class="bg-primary"></p>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">确认密码</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="在输入一次" name="pwd_c"><p id="pwd_c" class="bg-primary"></p>
+    </div>
+    <input type="submit" class="btn btn-default" value="确认修改">
+</form>
+</div>
+
+<script>
+    $('input[name="pwd_o"]').blur(function () {
+        checkpwd_o();
+    })
+    $('input[name="user_pwd"]').blur(function () {
+        checkuser_pwd();
+    })
+    $('input[name="pwd_c"]').blur(function () {
+        checkpwd_c();
+    })
+    $('input[type="submit"]').click(function () {
+        if(checkpwd_o()&&checkuser_pwd()&&checkpwd_c()){
+            return true;
+        }else{
+            return false;
+        }
+    })
+    function checkpwd_o(){
+        var pwd_o = $('input[name="pwd_o"]').val();
+        if(pwd_o == ''){
+            $('#pwd_o').text('请输入原密码');
+            return false;
+        }else{
+            $('#pwd_o').text('');
+            return true;
+        }
+    }
+    function checkuser_pwd(){
+        var user_pwd=$('input[name="user_pwd"]').val();
+        var preg=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,30}$/;
+        if(preg.test(user_pwd)){
+            $('#user_pwd').text('')
+            return true;
+        }else{
+            $('#user_pwd').text('密码必须6-30位，有字母大小写和数字');
+            return false;
+        }
+    }
+    function checkpwd_c(){
+        var user_pwd=$('input[name="user_pwd"]').val();
+        var pwd_c=$('input[name="pwd_c"]').val();
+        if(user_pwd == pwd_c && pwd_c != ''){
+            $('#pwd_c').text();
+            return true;
+        }else{
+            $('#pwd_c').text('两次输入密码不一致');
+            return false;
+        }
+    }
+</script>
