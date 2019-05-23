@@ -3,6 +3,7 @@ namespace app\index\controller;
 
 use app\index\model\Advert;
 use app\index\model\Blog;
+use app\index\model\Discuss;
 use app\index\model\IndexUser;
 use think\Controller;
 use think\facade\Session;
@@ -10,18 +11,27 @@ use think\facade\Validate;
 
 class Index extends Controller
 {
+    static $array;
     public function initialize()
     {
         $this->view->engine->layout(true);
     }
+    public function checkLogin()
+    {
+        if(!Session::has('user_arr')){
+            $this->error('请先登陆','/index/index/index');
+        }
+    }
     public function index()
     {
+        $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '' ;
         $Advert = new Advert();
         $advertList = $Advert->getAdvertList();
 
         $Blog = new Blog();
-        $blogList = $Blog->getBlogList();
-        return view('index',['advertList' => $advertList , 'blogList' => $blogList]);
+        $blogList = $Blog->getBlogList($keyword);
+        $page = $blogList->render();
+        return view('index',['advertList' => $advertList , 'blogList' => $blogList , 'keyword' => $keyword , 'page' => $page]);
     }
     public function savePwd()
     {
@@ -102,5 +112,79 @@ class Index extends Controller
         Session::set('time',$time);
 
         echo json_encode(['code' => $code]);
+    }
+    public function writeBlog()
+    {
+        if($_POST){
+            $data = $_POST;
+
+            $result = $this->validate($data,'app\index\validate\Blog');
+            if (true !== $result) {
+                // 验证失败 输出错误信息
+                $this->error($result,'/index/index/writeBlog');
+            }
+            $data['publishtime'] = time();
+            $data['host_num'] = 0;
+            $data['collec_num'] = 0;
+            $data['user_id'] = Session::get('user_arr')['user_id'];
+            $data['is_show'] = 3;
+            $Blog = new Blog();
+            $res = $Blog->insert($data);
+            if($res){
+                $this->success('发表成功，待管理员审核','/index/index/writeBlog');
+            }else{
+                $this->error('发表失败','/index/index/writeBlog');
+            }
+        }else{
+            return view('writeBlog');
+        }
+    }
+    public function blogShow()
+    {
+        $blog_id = $_GET['blog_id'];
+        $Blog = new Blog();
+        $oneBlog = $Blog->getOneBlog($blog_id);
+        if($oneBlog){
+            $Discuss = new Discuss();
+            $discussList = $Discuss->getDiscussList($blog_id);
+            $array = $this->digui($discussList);
+            return view('blogShow',['oneBlog' => $oneBlog , 'discussList' => $array]);
+        }else{
+            $this->error('未找到这篇博客','/index/index/index');
+        }
+    }
+    public function digui($discussList,$pid=0,$level=0)
+    {
+        foreach ($discussList as $k => $v){
+            if($v['pid'] == $pid){
+                $v['level'] = $level;
+                self::$array[] = $v;
+                $this->digui($discussList,$v['discuss_id'],$level+1);
+            }
+        }
+        return self::$array;
+    }
+    public function addDiscuss()
+    {
+        $data['discuss_content'] = $_POST['discuss_content'];
+
+        $result = $this->validate($data,'app\index\validate\Discuss');
+        if (true !== $result) {
+            // 验证失败 输出错误信息
+            $this->error($result,'/index/index/blogShow');
+        }
+
+        $data['blog_id'] = $_GET['blog_id'];
+        $data['discuss_addtime'] = time();
+        $data['pid'] = isset($_GET['pid']) ? $_GET['pid'] : 0 ;
+        $data['user_id'] = Session::get('user_arr')['user_id'];
+        $data['discuss_is_show'] = 3;
+        $Discuss = new Discuss();
+        $res = $Discuss->insert($data);
+        if($res){
+            $this->success('评论成功待管理员审核','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }else{
+            $this->error('评论失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
     }
 }

@@ -41,32 +41,28 @@
 
   <div class="title">
 	<h3>最新发布</h3>
-	<div class="more">                
-			<a href="#" title="MZ-NetBlog主题" >MZ-NetBlog主题</a>                
-			<a href="#" title="IT技术笔记" >IT技术笔记</a>                
-			<a href="#" title="源码分享" >源码分享</a>                
-			<a href="#" title="靠谱网赚" >靠谱网赚</a>                
-			<a href="#" title="资讯分享" >资讯分享</a>                
-		</div>
+
   </div>
 
-<?php foreach($blogList['data'] as $k => $v){ ?>
+<?php foreach($blogList as $k => $v){ ?>
   <article class="excerpt excerpt-1" style="">
-  <a class="focus" href="#" title="{$v.blog_title}" target="_blank" >
+  <a class="focus" href="/index/index/blogShow?blog_id={$v.blog_id}" title="{$v.blog_title}" target="_blank" >
 	  <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="{$v.blog_title}"  style="display: inline;">
   </a>
-		<header><a class="cat" href="#" title="MZ-NetBlog主题" >MZ-NetBlog主题<i></i></a>
-			<h2><a href="#" title="{$v.blog_title}" target="_blank" >{$v.blog_title}</a>
+		<header>
+			<h2><a href="/index/index/blogShow?blog_id={$v.blog_id}" title="{$v.blog_title}" target="_blank" >{$v.blog_title}</a>
 			</h2>
 		</header>
 		<p class="meta">
 			<time class="time"><i class="glyphicon glyphicon-time"></i><?php echo date('Y-m-d H:i:s',$v['publishtime']); ?></time>
 			<span class="views"><i class="glyphicon glyphicon-eye-open"></i> 216</span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i> 4</a>
 		</p>
-		<p class="note">用DTcms做一个独立博客网站（响应式模板），采用DTcms V4.0正式版（MSSQL）。开发环境：SQL2008R2+VS2010。DTcms V4.0正式版功能修复和优化：1、favicon.ico图标后台上传。（解决要换图标时要连FTP或者开服务器的麻烦）</p>
+		<p class="note"><?php echo substr($v['blog_content'],0,100).'……'; ?></p>
 	</article>
 <?php } ?>
 
+
+<div id="page" style="padding-left: 40%">{$page}</div>
   <!--<nav class="pagination" style="display: none;">-->
 	<!--<ul>-->
 	  <!--<li class="prev-page"></li>-->
@@ -91,23 +87,23 @@
 			  888篇
 		  </h2>
 		  <h2>网站运行:
-		  <span id="sitetime">88天 </span></h2>
+		  <span id="sitetime"><?php echo ceil((time() - 1557417600) / 60 / 60 / 24); ?> 天</span></h2>
 	  </div>
 		<div role="tabpanel" class="tab-pane contact" id="contact">
-		  <h2>QQ:
+		  <h2>QQ:206615407
 			  <a href="" target="_blank" rel="nofollow" data-toggle="tooltip" data-placement="bottom" title=""  data-original-title="QQ:"></a>
 		  </h2>
-		  <h2>Email:
+		  <h2>Email:206615407@qq.com
 		  <a href="#" target="_blank" data-toggle="tooltip" rel="nofollow" data-placement="bottom" title=""  data-original-title="#"></a></h2>
 	  </div>
 	</div>
   </div>
   <div class="widget widget_search">
-	<form class="navbar-form" action="/Search" method="post">
+	<form class="navbar-form" action="/index/index/index" method="post">
 	  <div class="input-group">
-		<input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off">
+		<input type="text" name="keyword" class="form-control" size="35" placeholder="请输入博客标题或作者关键字" maxlength="15" autocomplete="off" value="{$keyword}">
 		<span class="input-group-btn">
-		<button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+		<input class="btn btn-default btn-search" name="search" type="submit" value="搜索">
 		</span> </div>
 	</form>
   </div>
@@ -197,4 +193,6 @@
         },
         loop : true,
     })
+	var page = $('#page').text();
+    $('#page').html(page);
 </script>

@@ -8,7 +8,7 @@ class Advert extends Model
     protected $pk = 'advert_id';
     public function getAdvertList()
     {
-        $advertList = Advert::where('advert_is_show','=','1')->select()->toArray();
+        $advertList = Advert::where('advert_is_show','=','1')->select();
         return $advertList;
     }
 }
