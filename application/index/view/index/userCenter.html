@@ -1,0 +1,89 @@
+<section class="container container-page">
+    <div class="pageside">
+        <div class="pagemenus">
+            <ul class="pagemenu">
+                <li><a href="/index/index/userCenter">个人信息</a></li>
+                <li><a href="/index/index/collec">我的收藏</a></li>
+                <li><a href="readers.html">读者墙</a></li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <header class="article-header">
+            <h1 class="article-title">个人信息</h1>
+        </header>
+        <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>用户名</th>
+                <td>{$user_arr.user_name}</td>
+            </tr>
+            <tr>
+                <th>邮箱</th>
+                <td>{$user_arr.user_email}</td>
+            </tr>
+            <tr>
+                <th>手机号</th>
+                <td>{$user_arr.user_call}</td>
+            </tr>
+            <tr>
+                <th>注册时间</th>
+                <td><?php echo date('Y-m-d H:i:s',$user_arr['addtime']);?></td>
+            </tr>
+            <tr>
+                <th>粉丝数量</th>
+                <td>{$fansNum}</td>
+            </tr>
+        </table>
+        </div>
+        <span>我关注的人</span>
+        <ul class="plinks">
+            {foreach $attention as $k => $v}
+            <li><a href="javascript:;" title="" target="_blank" rel="nofollow">{$v.user_name}</a></li>
+            {/foreach}
+        </ul>
+    </div>
+</section>
+
+<!--微信二维码模态框-->
+<div class="modal fade user-select" id="WeChat" tabindex="-1" role="dialog" aria-labelledby="WeChatModalLabel">
+    <div class="modal-dialog" role="document" style="margin-top:120px;width:280px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="WeChatModalLabel" style="cursor:default;">微信扫一扫</h4>
+            </div>
+            <div class="modal-body" style="text-align:center"> <img src="images/weixin.jpg" alt="" style="cursor:pointer"/> </div>
+        </div>
+    </div>
+</div>
+<!--该功能正在日以继夜的开发中-->
+<div class="modal fade user-select" id="areDeveloping" tabindex="-1" role="dialog" aria-labelledby="areDevelopingModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="areDevelopingModalLabel" style="cursor:default;">该功能正在日以继夜的开发中…</h4>
+            </div>
+            <div class="modal-body"> <img src="images/baoman/baoman_01.gif" alt="深思熟虑" />
+                <p style="padding:15px 15px 15px 100px; position:absolute; top:15px; cursor:default;">很抱歉，程序猿正在日以继夜的开发此功能，本程序将会在以后的版本中持续完善！</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">朕已阅</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="rightClickMenu">
+    <ul class="list-group rightClickMenuList">
+        <li class="list-group-item disabled">欢迎访问异清轩博客</li>
+        <li class="list-group-item"><span>IP：</span>172.16.10.129</li>
+        <li class="list-group-item"><span>地址：</span>河南省郑州市</li>
+        <li class="list-group-item"><span>系统：</span>Windows10 </li>
+        <li class="list-group-item"><span>浏览器：</span>Chrome47</li>
+    </ul>
+</div>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.ias.js"></script>
+<script src="js/scripts.js"></script>

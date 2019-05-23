@@ -2,9 +2,13 @@
 namespace app\index\controller;
 
 use app\index\model\Advert;
+use app\index\model\Attention;
 use app\index\model\Blog;
+use app\index\model\Collec;
 use app\index\model\Discuss;
+use app\index\model\Fans;
 use app\index\model\IndexUser;
+use app\index\model\Link;
 use think\Controller;
 use think\facade\Session;
 use think\facade\Validate;
@@ -31,7 +35,24 @@ class Index extends Controller
         $Blog = new Blog();
         $blogList = $Blog->getBlogList($keyword);
         $page = $blogList->render();
-        return view('index',['advertList' => $advertList , 'blogList' => $blogList , 'keyword' => $keyword , 'page' => $page]);
+
+        $blogList_d = $Blog->getBlogListByDiscuss();
+
+        $hostBlog = $Blog->getHostBlog();
+
+        $Link = new Link();
+        $linkList = $Link->getLinkList();
+
+        $array = [
+            'advertList' => $advertList ,
+            'blogList' => $blogList ,
+            'keyword' => $keyword ,
+            'page' => $page ,
+            'blogList_d' => $blogList_d ,
+            'linkList' => $linkList ,
+            'hostBlog' => $hostBlog
+        ];
+        return view('index',$array);
     }
     public function savePwd()
     {
@@ -148,7 +169,8 @@ class Index extends Controller
             $Discuss = new Discuss();
             $discussList = $Discuss->getDiscussList($blog_id);
             $array = $this->digui($discussList);
-            return view('blogShow',['oneBlog' => $oneBlog , 'discussList' => $array]);
+            $blogList_d = $Blog->getBlogListByDiscuss();
+            return view('blogShow',['oneBlog' => $oneBlog , 'discussList' => $array , 'blogList_d' => $blogList_d]);
         }else{
             $this->error('未找到这篇博客','/index/index/index');
         }
@@ -185,6 +207,33 @@ class Index extends Controller
             $this->success('评论成功待管理员审核','/index/index/blogShow?blog_id='.$_GET['blog_id']);
         }else{
             $this->error('评论失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+    }
+    public function userCenter()
+    {
+        $user_arr = Session::get('user_arr');
+
+        $Fans = new Fans();
+        $fansNum = $Fans->getFansNum($user_arr['user_id']);
+
+
+        $attentionList = $Fans->getAttentionList($user_arr['user_id']);
+        return view('userCenter',['user_arr' => $user_arr , 'fansNum' => $fansNum , 'attention' => $attentionList]);
+    }
+    public function collec()
+    {
+        $Collec = new Collec();
+        $collecList = $Collec->getCollecList(Session::get('user_arr')['user_id']);
+        return view('collec',['collecList' => $collecList]);
+    }
+    public function delCollec()
+    {
+        $Collec = new Collec();
+        $res = $Collec->cancelCollec($_GET['blog_id']);
+        if($res){
+            $this->success('取消成功','/index/index/collec');
+        }else{
+            $this->error('取消失败','/index/index/collec');
         }
     }
 }
