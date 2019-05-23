@@ -11,38 +11,28 @@
     </div>
     <div class="content">
         <header class="article-header">
-            <h1 class="article-title">个人信息</h1>
+            <h1 class="article-title">我的博客</h1>
         </header>
-        <div class="table-responsive">
-        <table class="table">
-            <tr>
-                <th>用户名</th>
-                <td>{$user_arr.user_name}</td>
-            </tr>
-            <tr>
-                <th>邮箱</th>
-                <td>{$user_arr.user_email}</td>
-            </tr>
-            <tr>
-                <th>手机号</th>
-                <td>{$user_arr.user_call}</td>
-            </tr>
-            <tr>
-                <th>注册时间</th>
-                <td><?php echo date('Y-m-d H:i:s',$user_arr['addtime']);?></td>
-            </tr>
-            <tr>
-                <th>粉丝数量</th>
-                <td>{$fansNum}</td>
-            </tr>
-        </table>
-        </div>
-        <span>我关注的人</span>
-        <ul class="plinks">
-            {foreach $attention as $k => $v}
-            <li><a href="javascript:;" title="" target="_blank" rel="nofollow">{$v.user_name}</a></li>
-            {/foreach}
-        </ul>
+
+        {foreach $myBlogList as $k => $v}
+        <article class="excerpt excerpt-1" style="">
+            <a class="focus" href="/index/index/blogShow?blog_id={$v.blog_id}" title="{$v.blog_title}" target="_blank" >
+                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="{$v.blog_title}"  style="display: inline;">
+            </a>
+            <header>
+                <a class="cat" href="javascript:;" title="<?php echo Session::get('user_arr')['user_name'];?>" ><?php echo Session::get('user_arr')['user_name'];?><i></i></a>
+                <h2><a href="/index/index/blogShow?blog_id={$v.blog_id}" title="{$v.blog_title}" target="_blank" >{$v.blog_title}</a>
+                </h2>
+            </header>
+            <p class="meta">
+                <time class="time"><i class="glyphicon glyphicon-time"></i><?php echo date('Y-m-d H:i:s',$v['publishtime']); ?></time>
+                <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 216</span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i> 4</a>
+            </p>
+            <p class="note"><?php echo substr($v['blog_content'],0,100).'……'; ?></p>
+            <a href="/index/index/delBlog?blog_id={$v.blog_id}"><button class="btn btn-default">删除博文</button></a>
+        </article>
+        {/foreach}
+
     </div>
 </section>
 

@@ -236,4 +236,51 @@ class Index extends Controller
             $this->error('取消失败','/index/index/collec');
         }
     }
+    public function addFans()
+    {
+        $Fans = new Fans();
+        $arr = $Fans->isFans($_GET['user_id'],Session::get('user_arr')['user_id']);
+        if($arr){
+            $this->error('已关注，请勿重复关注','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+        if($_GET['user_id'] == Session::get('user_arr')['user_id']){
+            $this->error('不能自己关注自己','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+        $res = $Fans->addFans($_GET['user_id'],Session::get('user_arr')['user_id']);
+        if($res){
+            $this->success('关注成功','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }else{
+            $this->error('关注失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+    }
+    public function addCollec()
+    {
+        $Collec = new Collec();
+        $arr = $Collec->isCollec(Session::get('user_arr')['user_id'],$_GET['blog_id']);
+        if($arr){
+            $this->error('已收藏，请勿重复收藏','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+        $res = $Collec->addCollec(Session::get('user_arr')['user_id'],$_GET['blog_id']);
+        if($res){
+            $this->success('收藏成功','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }else{
+            $this->error('收藏失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+    }
+    public function myBlog()
+    {
+        $Blog = new Blog();
+        $myBlogList = $Blog->getMyBlogList(Session::get('user_arr')['user_id']);
+        return view('myBlog',['myBlogList' => $myBlogList]);
+    }
+    public function delBlog()
+    {
+        $Blog = new Blog();
+        $res = $Blog->delBlog(Session::get('user_arr')['user_id'],$_GET['blog_id']);
+        if($res){
+            $this->success('删除成功','/index/index/myBlog');
+        }else{
+            $this->error('删除失败','/index/index/myBlog');
+        }
+    }
 }

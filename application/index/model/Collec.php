@@ -15,4 +15,14 @@ class Collec extends Model
         $res = Collec::where('blog_id','=',"$blog_id")->delete();
         return $res;
     }
+    public function addCollec($user_id,$blog_id)
+    {
+        $res = Collec::insert(['user_id' => $user_id , 'blog_id' => $blog_id]);
+        return $res;
+    }
+    public function isCollec($user_id,$blog_id)
+    {
+        $arr = Fans::where('user_id','=',"$user_id")->where('blog_id','=',"$blog_id")->find();
+        return $arr;
+    }
 }

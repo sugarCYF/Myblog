@@ -26,4 +26,14 @@ class Blog extends Model
         $arr = Blog::where('is_show','=','1')->order('host_num','desc')->find();
         return $arr;
     }
+    public function getMyBlogList($user_id)
+    {
+        $myBlogList = Blog::where('user_id','=',"$user_id")->select();
+        return $myBlogList;
+    }
+    public function delBlog($user_id,$blog_id)
+    {
+        $res = Blog::where('user_id','=',"$user_id")->where('blog_id','=',"$blog_id")->delete();
+        return $res;
+    }
 }
