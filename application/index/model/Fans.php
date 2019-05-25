@@ -25,4 +25,9 @@ class Fans extends Model
         $arr = Fans::where('user_id','=',"$user_id")->where('fans_id','=',"$fans_id")->find();
         return $arr;
     }
+    public function cancelFans($user_id,$fans_id)
+    {
+        $res = Fans::where('user_id','=',"$user_id")->where('fans_id','=',"$fans_id")->delete();
+        return $res;
+    }
 }

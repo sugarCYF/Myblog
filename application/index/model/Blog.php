@@ -1,6 +1,7 @@
 <?php
 namespace app\index\model;
 
+use think\Db;
 use think\Model;
 
 class Blog extends Model
@@ -34,6 +35,26 @@ class Blog extends Model
     public function delBlog($user_id,$blog_id)
     {
         $res = Blog::where('user_id','=',"$user_id")->where('blog_id','=',"$blog_id")->delete();
+        return $res;
+    }
+    public function addCollec($blog_id)
+    {
+        $res = Blog::where('blog_id','=',"$blog_id")->update(['collec_num' => Db::raw('collec_num + 1')]);
+        return $res;
+    }
+    public function addHost($blog_id)
+    {
+        $res = Blog::where('blog_id','=',"$blog_id")->update(['host_num' => Db::raw('host_num + 1')]);
+        return $res;
+    }
+    public function delHost($blog_id)
+    {
+        $res = Blog::where('blog_id','=',"$blog_id")->update(['host_num' => Db::raw('host_num - 1')]);
+        return $res;
+    }
+    public function delCollec($blog_id)
+    {
+        $res = Blog::where('blog_id','=',"$blog_id")->update(['collec_num' => Db::raw('collec_num - 1')]);
         return $res;
     }
 }

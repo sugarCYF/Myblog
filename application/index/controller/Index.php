@@ -7,6 +7,7 @@ use app\index\model\Blog;
 use app\index\model\Collec;
 use app\index\model\Discuss;
 use app\index\model\Fans;
+use app\index\model\Host;
 use app\index\model\IndexUser;
 use app\index\model\Link;
 use think\Controller;
@@ -56,6 +57,7 @@ class Index extends Controller
     }
     public function savePwd()
     {
+        $this->checkLogin();
         if($_POST){
             if($_POST['pwd_c'] != $_POST['user_pwd']){
                 $this->error('两次输入密码不一致','/index/index/savePwd');
@@ -136,6 +138,7 @@ class Index extends Controller
     }
     public function writeBlog()
     {
+        $this->checkLogin();
         if($_POST){
             $data = $_POST;
 
@@ -170,7 +173,32 @@ class Index extends Controller
             $discussList = $Discuss->getDiscussList($blog_id);
             $array = $this->digui($discussList);
             $blogList_d = $Blog->getBlogListByDiscuss();
-            return view('blogShow',['oneBlog' => $oneBlog , 'discussList' => $array , 'blogList_d' => $blogList_d]);
+
+            $Fans = new Fans();
+            $arr = $Fans->isFans($oneBlog['user_id'],Session::get('user_arr')['user_id']);
+            if($arr){
+                $dw['fans'] = 1;
+            }else{
+                $dw['fans'] = 0;
+            }
+
+            $Collec = new Collec();
+            $arr = $Collec->isCollec(Session::get('user_arr')['user_id'],$blog_id);
+            if($arr){
+                $dw['collec'] = 1;
+            }else{
+                $dw['collec'] = 0;
+            }
+
+            $Host = new Host();
+            $arr = $Host->isHost(Session::get('user_arr')['user_id'],$blog_id);
+            if($arr){
+                $dw['host'] = 1;
+            }else{
+                $dw['host'] = 0;
+            }
+
+            return view('blogShow',['oneBlog' => $oneBlog , 'discussList' => $array , 'blogList_d' => $blogList_d , 'dw' => $dw]);
         }else{
             $this->error('未找到这篇博客','/index/index/index');
         }
@@ -188,6 +216,7 @@ class Index extends Controller
     }
     public function addDiscuss()
     {
+        $this->checkLogin();
         $data['discuss_content'] = $_POST['discuss_content'];
 
         $result = $this->validate($data,'app\index\validate\Discuss');
@@ -211,6 +240,7 @@ class Index extends Controller
     }
     public function userCenter()
     {
+        $this->checkLogin();
         $user_arr = Session::get('user_arr');
 
         $Fans = new Fans();
@@ -222,15 +252,19 @@ class Index extends Controller
     }
     public function collec()
     {
+        $this->checkLogin();
         $Collec = new Collec();
         $collecList = $Collec->getCollecList(Session::get('user_arr')['user_id']);
         return view('collec',['collecList' => $collecList]);
     }
     public function delCollec()
     {
+        $this->checkLogin();
         $Collec = new Collec();
-        $res = $Collec->cancelCollec($_GET['blog_id']);
+        $res = $Collec->cancelCollec(Session::get('user_arr')['user_id'],$_GET['blog_id']);
         if($res){
+            $Blog = new Blog();
+            $Blog->delCollec($_GET['blog_id']);
             $this->success('取消成功','/index/index/collec');
         }else{
             $this->error('取消失败','/index/index/collec');
@@ -238,6 +272,7 @@ class Index extends Controller
     }
     public function addFans()
     {
+        $this->checkLogin();
         $Fans = new Fans();
         $arr = $Fans->isFans($_GET['user_id'],Session::get('user_arr')['user_id']);
         if($arr){
@@ -255,6 +290,7 @@ class Index extends Controller
     }
     public function addCollec()
     {
+        $this->checkLogin();
         $Collec = new Collec();
         $arr = $Collec->isCollec(Session::get('user_arr')['user_id'],$_GET['blog_id']);
         if($arr){
@@ -262,6 +298,8 @@ class Index extends Controller
         }
         $res = $Collec->addCollec(Session::get('user_arr')['user_id'],$_GET['blog_id']);
         if($res){
+            $Blog = new Blog();
+            $Blog->addCollec($_GET['blog_id']);
             $this->success('收藏成功','/index/index/blogShow?blog_id='.$_GET['blog_id']);
         }else{
             $this->error('收藏失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
@@ -269,12 +307,14 @@ class Index extends Controller
     }
     public function myBlog()
     {
+        $this->checkLogin();
         $Blog = new Blog();
         $myBlogList = $Blog->getMyBlogList(Session::get('user_arr')['user_id']);
         return view('myBlog',['myBlogList' => $myBlogList]);
     }
     public function delBlog()
     {
+        $this->checkLogin();
         $Blog = new Blog();
         $res = $Blog->delBlog(Session::get('user_arr')['user_id'],$_GET['blog_id']);
         if($res){
@@ -283,4 +323,84 @@ class Index extends Controller
             $this->error('删除失败','/index/index/myBlog');
         }
     }
+    public function myDiscuss()
+    {
+        $this->checkLogin();
+        $Discuss = new Discuss();
+        $myDiscussList = $Discuss->getMyDiscussList(Session::get('user_arr')['user_id']);
+        return view('myDiscuss',['myDiscussList' => $myDiscussList]);
+    }
+    public function delDiscuss()
+    {
+        $this->checkLogin();
+        $Discuss = new Discuss();
+        $res = $Discuss->delDiscuss(Session::get('user_arr')['user_id'],$_GET['discuss_id']);
+        if($res){
+            $this->success('删除成功','/index/index/myDiscuss');
+        }else{
+            $this->error('删除失败','/index/index/myDiscuss');
+        }
+    }
+    public function addHost()
+    {
+        $this->checkLogin();
+        $Host = new Host();
+        $arr = $Host->isHost(Session::get('user_arr')['user_id'],$_GET['blog_id']);
+        if($arr){
+            $this->error('请勿重复点赞','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+        $res = $Host->addHost(Session::get('user_arr')['user_id'],$_GET['blog_id']);
+//        if($res){
+            $Blog = new Blog();
+            $Blog->addHost($_GET['blog_id']);
+            return $this->blogShow();
+//            $this->success('点赞成功','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+//        }else{
+//            $this->error('点赞失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+//        }
+    }
+    public function delFans()
+    {
+        $this->checkLogin();
+        $Fans = new Fans();
+        $res = $Fans->cancelFans($_GET['user_id'],Session::get('user_arr')['user_id']);
+        if($res){
+            $this->success('取消成功','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }else{
+            $this->error('取消失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+    }
+    public function delHost()
+    {
+        $this->checkLogin();
+        $Host = new Host();
+        $res = $Host->cancelHost(Session::get('user_arr')['user_id'],$_GET['blog_id']);
+        if($res){
+            $Blog = new Blog();
+            $Blog->delHost($_GET['blog_id']);
+            $this->success('取消成功','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }else{
+            $this->error('取消失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+    }
+    public function cancelCollec()
+    {
+        $this->checkLogin();
+        $Collec = new Collec();
+        $res = $Collec->cancelCollec(Session::get('user_arr')['user_id'],$_GET['blog_id']);
+        if($res){
+            $Blog = new Blog();
+            $Blog->delCollec($_GET['blog_id']);
+            $this->success('取消成功','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }else{
+            $this->error('取消失败','/index/index/blogShow?blog_id='.$_GET['blog_id']);
+        }
+    }
 }
+//99669999996669999996699666699666999966699666699
+//99699999999699999999699666699669966996699666699
+//99669999999999999996699666699699666699699666699
+//99666699999999999966666999966699666699699666699
+//99666666999999996666666699666699666699699666699
+//99666666669999666666666699666669966996699666699
+//99666666666996666666666699666666999966669999996

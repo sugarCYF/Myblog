@@ -7,7 +7,7 @@
 	<h1 class="article-title"><a href="/index/index/blogShow?blog_id={$oneBlog.blog_id}" title="{$oneBlog.blog_title}" >{$oneBlog.blog_title}</a></h1>
 	<div class="article-meta"> <span class="item article-meta-time">
 	  <time class="time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="发表时间：<?php echo date('Y-m-d H:i:s',$oneBlog['publishtime']); ?>"><i class="glyphicon glyphicon-time"></i> <?php echo date('Y-m-d H:i:s',$oneBlog['publishtime']); ?></time>
-	  </span><span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="浏览量：219"><i class="glyphicon glyphicon-eye-open"></i> 219</span> <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> 4</span> </div>
+	  </span><span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="点赞：{$oneBlog.host_num}"><i class="glyphicon glyphicon-eye-open"></i> {$oneBlog.host_num}</span> <span class="item article-meta-comment" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="评论量"><i class="glyphicon glyphicon-comment"></i> 4</span> </div>
   </header>
   <article class="article-content">
 	<div id="blog_content">{$oneBlog.blog_content}</div>
@@ -19,9 +19,24 @@
 
   </article>
     <div class="article-tags">
-        <a href="/index/index/addFans?user_id={$oneBlog.user_id}&blog_id={$oneBlog.blog_id}" rel="tag" >关注博主</a>
-        <a href="/index/index/addCollec?blog_id={$oneBlog.blog_id}" rel="tag" >收藏博文</a>
-        <a href="#list/4/" rel="tag" >点赞</a>
+		{if $dw.fans == 1 }
+		<a href="/index/index/delFans?user_id={$oneBlog.user_id}&blog_id={$oneBlog.blog_id}" rel="tag" >取消关注</a>
+		{else /}
+		<a href="/index/index/addFans?user_id={$oneBlog.user_id}&blog_id={$oneBlog.blog_id}" rel="tag" >关注博主</a>
+		{/if}
+
+		{if $dw.collec == 1}
+        <a href="/index/index/cancelCollec?blog_id={$oneBlog.blog_id}" rel="tag" >取消收藏</a>
+		{else /}
+		<a href="/index/index/addCollec?blog_id={$oneBlog.blog_id}" rel="tag" >收藏博文</a>
+		{/if}
+
+		{if $dw.host == 1}
+		<a href="/index/index/delHost?blog_id={$oneBlog.blog_id}" rel="tag" >取消赞</a>
+		{else /}
+        <a href="/index/index/addHost?blog_id={$oneBlog.blog_id}" rel="tag" >点赞</a>
+		{/if}
+
     </div>
   <div class="relates">
 
@@ -47,7 +62,7 @@
   <div id="postcomments">
 
 	<ol id="comment_list" class="commentlist">
-		{foreach $discussList as $k => $v }
+		{volist name="discussList" id="v" }
 	<li class="comment-content">
 		<span class="comment-f">
 			<a href="javascript:;">回复</a>
@@ -75,7 +90,7 @@
 	</div>
 	</li>
 
-		{/foreach}
+		{/volist}
 	</ol>
   </div>
 </div>

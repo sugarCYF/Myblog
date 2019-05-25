@@ -11,28 +11,15 @@
     </div>
     <div class="content">
         <header class="article-header">
-            <h1 class="article-title">我的博客</h1>
+            <h1 class="article-title">我的评论</h1>
         </header>
-
-        {foreach $myBlogList as $k => $v}
-        <article class="excerpt excerpt-1" style="">
-            <a class="focus" href="/index/index/blogShow?blog_id={$v.blog_id}" title="{$v.blog_title}" target="_blank" >
-                <img class="thumb" data-original="images/201610181739277776.jpg" src="images/201610181739277776.jpg" alt="{$v.blog_title}"  style="display: inline;">
-            </a>
-            <header>
-                <a class="cat" href="javascript:;" title="<?php echo Session::get('user_arr')['user_name'];?>" ><?php echo Session::get('user_arr')['user_name'];?><i></i></a>
-                <h2><a href="/index/index/blogShow?blog_id={$v.blog_id}" title="{$v.blog_title}" target="_blank" >{$v.blog_title}</a>
-                </h2>
-            </header>
-            <p class="meta">
-                <time class="time"><i class="glyphicon glyphicon-time"></i><?php echo date('Y-m-d H:i:s',$v['publishtime']); ?></time>
-                <span class="views"><i class="glyphicon glyphicon-eye-open"></i> 216</span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i> 4</a>
-            </p>
-            <p class="note"><?php echo substr($v['blog_content'],0,100).'……'; ?></p>
-            <a href="/index/index/delBlog?blog_id={$v.blog_id}"><button class="btn btn-default">删除博文</button></a>
-        </article>
-        {/foreach}
-
+        <div id="postcomments">
+            <ol id="comment_list" class="commentlist">
+                {foreach $myDiscussList as $k => $v}
+                <li class="comment-content"><span class="comment-f"><a href="/index/index/blogShow?blog_id={$v.blog_id}"><button>查看原博文</button></a><a href="/index/index/delDiscuss?discuss_id={$v.discuss_id}"><button>删除</button></a></span><div class="comment-main"><p><a class="address" href="javascript:;" rel="nofollow" target="_blank"><?php echo Session::get('user_arr')['user_name'];?></a><span class="time">(<?php echo date('Y-m-d H:i:s',$v['discuss_addtime']);?>)</span><br>{$v.discuss_content}</p></div></li>
+                {/foreach}
+            </ol>
+        </div>
     </div>
 </section>
 
@@ -65,15 +52,7 @@
         </div>
     </div>
 </div>
-<div id="rightClickMenu">
-    <ul class="list-group rightClickMenuList">
-        <li class="list-group-item disabled">欢迎访问异清轩博客</li>
-        <li class="list-group-item"><span>IP：</span>172.16.10.129</li>
-        <li class="list-group-item"><span>地址：</span>河南省郑州市</li>
-        <li class="list-group-item"><span>系统：</span>Windows10 </li>
-        <li class="list-group-item"><span>浏览器：</span>Chrome47</li>
-    </ul>
-</div>
+
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.ias.js"></script>
 <script src="js/scripts.js"></script>

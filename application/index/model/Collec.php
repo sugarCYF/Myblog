@@ -10,9 +10,9 @@ class Collec extends Model
         $collecList = Collec::join('blog','blog.blog_id = collec.blog_id')->join('index_user','index_user.user_id = blog.user_id')->where('blog.is_show','=',"1")->where('collec.user_id','=',"$user_id")->order('blog.publishtime','desc')->select();
         return $collecList;
     }
-    public function cancelCollec($blog_id)
+    public function cancelCollec($user_id,$blog_id)
     {
-        $res = Collec::where('blog_id','=',"$blog_id")->delete();
+        $res = Collec::where('user_id','=',"$user_id")->where('blog_id','=',"$blog_id")->delete();
         return $res;
     }
     public function addCollec($user_id,$blog_id)
@@ -22,7 +22,7 @@ class Collec extends Model
     }
     public function isCollec($user_id,$blog_id)
     {
-        $arr = Fans::where('user_id','=',"$user_id")->where('blog_id','=',"$blog_id")->find();
+        $arr = Collec::where('user_id','=',"$user_id")->where('blog_id','=',"$blog_id")->find();
         return $arr;
     }
 }
